@@ -1,0 +1,65 @@
+# This example shows how to map API files in your repository to APIs you
+# already have in 42Crunch Platform.
+#
+# When the CI/CD plugin starts, it creates an API collection in 42Crunch Platform
+# using the name of the repository and branch directly from your source control.
+#
+# The plugin uploads any APIs it finds during the discovery phase
+# into this API collection On subsequent runs, the collection is kept is sync
+# with the API files in your source repository.
+#
+# If you have APIs in other API collections on 42Crunch Platform that you 
+# would like like to keep in sync with changes in the files in your source control,
+# you can use mappings for this.
+#
+# To configure the mapping, you must know the API UUID of the existing API
+# in 42Crunch Platform (you can check it in the API summary on 
+# the platform). You list the filenames and the corresponding API UUIDs 
+# in the 'mapping' section.
+#
+# In this example, the sample 'petstore.json' file is mapped, and the plugin uploads 
+# it to the platform updating the contents of the API with
+# the UUID 'e7cd62ce-1ee9-4320-af33-8bd9519c6f48' with the contents of the file from
+# the source code repository.
+#
+# On the other hand, the sample file 'petstore.yaml' is not mapped,
+# so the plugin uploads to its default API collection.
+
+audit:
+  branches:
+    master:
+      mapping:
+        openapi555.yaml: 67189acb-63ca-4c77-909d-d42bae6dc3d7
+      fail_on:
+        score:
+          data: 70
+    "feature-*":
+      fail_on:
+        score:
+          data: 50
+    "**":
+      fail_on:
+        score:
+          data: 60
+  tags:
+    v1.0:
+      fail_on:
+        score:
+          data: 50
+    v2.0:
+      fail_on:
+        score:
+          data: 60
+    "**":
+      fail_on:
+        score:
+          data: 70
+  prs:
+    main:
+      fail_on:
+        score:
+          data: 70
+    "**":
+      fail_on:
+        score:
+          data: 50
